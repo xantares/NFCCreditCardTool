@@ -51,21 +51,27 @@ public class ParseGeneralInfo
 
         // PAN & Expiry
         this.pan = new String();
-        for(i = 0; i < data.length - 1; i++)
+        for(i = 0; i < data.length - 2; i++)
         {
-            if((data[i] == 0x4d || data[i] == (byte) 0x9c) && (data[i + 1] == 0x57))
+//             if((data[i] == 0x4d || data[i] == (byte) 0x9c) && (data[i + 1] == 0x57))
+            if((data[i] == 0x5a) && (data[i + 1] == 0x08))
             {
                 //int panlg = (int) data[i+2];
-                this.pan = toHex(Arrays.copyOfRange(data, i + 3, i + 11));
+                this.pan = toHex(Arrays.copyOfRange(data, i + 2, i + 10));
                 if(false)
                 {
                     this.pan = this.pan.substring(0, 4) + " **** **** " + this.pan.substring(12, 16);
                 }
-                int e = (byteValue(data[i + 13]) + (byteValue(data[i + 12]) << 8) + (byteValue(data[i + 11]) << 16)) >> 4;
-                byte[] emonth = {(byte) (e & 255)};
-                byte[] eyear = {(byte) ((e >> 8) & 255)};
-                this.expirydate = toHex(emonth) + "/20" + toHex(eyear);
+//                 int e = (byteValue(data[i + 13]) + (byteValue(data[i + 12]) << 8) + (byteValue(data[i + 11]) << 16)) >> 4;
+//                 byte[] emonth = {(byte) (e & 255)};
+//                 byte[] eyear = {(byte) ((e >> 8) & 255)};
+//                 this.expirydate = toHex(emonth) + "/20" + toHex(eyear);
             }
+        }
+        for(i = 0; i < data.length - 3; i++)
+        {
+            if((data[i] == 0x5f) && (data[i + 1] == 0x24) && (data[i + 2] == 0x03))
+                this.expirydate = "20"+toHex(Arrays.copyOfRange(data, i + 3, i + 4)) + "-" + toHex(Arrays.copyOfRange(data, i + 4, i + 5)) + "-" + toHex(Arrays.copyOfRange(data, i + 5, i + 6));
         }
     }
 }

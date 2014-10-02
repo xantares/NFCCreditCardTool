@@ -120,7 +120,7 @@ public class NFCCreditCardToolActivity extends Activity
             response = myTag.transceive(readRecordVisa);
             ParseGeneralInfo pgi = new ParseGeneralInfo(response);
             if(pgi.cardholdername.length() > 0 || pgi.pan.length() > 0)
-                tv1.setText(pgi.cardholdername + "\n" + pgi.pan + "\n" + pgi.expirydate + "\n");
+                tv1.setText("CARDHOLDER: " + pgi.cardholdername + "\nPAN:" + pgi.pan + "\nEXPIRY:" + pgi.expirydate + "\n");
         }
         catch (IOException e)
         {
@@ -133,7 +133,7 @@ public class NFCCreditCardToolActivity extends Activity
             response = myTag.transceive(readRecordMC);
             ParseGeneralInfo pgi = new ParseGeneralInfo(response);
             if(pgi.cardholdername.length() > 0 || pgi.pan.length() > 0)
-                tv1.setText(pgi.cardholdername + "\n" + pgi.pan + "\n" + pgi.expirydate + "\n");
+                tv1.setText("CARDHOLDER: " + pgi.cardholdername + "\nPAN:" + pgi.pan + "\nEXPIRY:" + pgi.expirydate + "\n");
         }
         catch (IOException e)
         {
