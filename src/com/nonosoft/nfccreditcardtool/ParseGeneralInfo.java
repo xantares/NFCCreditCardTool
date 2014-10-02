@@ -44,7 +44,7 @@ public class ParseGeneralInfo {
 		// PAN & Expiry
 		this.pan = new String();
 		for(i=0;i<data.length-1;i++) {
-			if((data[i]==0x4d)&&(data[i+1]==0x57)) {
+			if((data[i]==0x4d||data[i]==(byte) 0x9c)&&(data[i+1]==0x57)) {
 				//int panlg = (int) data[i+2];
 				this.pan = toHex(Arrays.copyOfRange(data, i+3, i+11));
 				if(false) {

@@ -97,22 +97,45 @@ public class NFCCreditCardToolActivity extends Activity {
 			e.printStackTrace();
 			return;
 		}
-        byte readRecord[] = {0x00,(byte) 0xB2,0x02,0x0C,0x00};
+        byte readRecordVisa[] = {0x00,(byte) 0xB2,0x02,0x0C,0x00};
         try {
-			response = myTag.transceive(readRecord);
+			response = myTag.transceive(readRecordVisa);
 			ParseGeneralInfo pgi = new ParseGeneralInfo(response);
-			tv1.setText(pgi.cardholdername+"\n"+pgi.pan+"\n"+pgi.expirydate+"\n");
+			if(pgi.cardholdername.length() > 0 || pgi.pan.length() > 0)
+				tv1.setText(pgi.cardholdername+"\n"+pgi.pan+"\n"+pgi.expirydate+"\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
-        byte readPayLog[] = {0x00,(byte) 0xB2,0x01,(byte) 0x8C,0x00};
+        byte readRecordMC[] = {0x00,(byte) 0xB2,0x01,0x14,0x00};
+        try {
+			response = myTag.transceive(readRecordMC);
+			ParseGeneralInfo pgi = new ParseGeneralInfo(response);
+			if(pgi.cardholdername.length() > 0 || pgi.pan.length() > 0)
+				tv1.setText(pgi.cardholdername+"\n"+pgi.pan+"\n"+pgi.expirydate+"\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+        byte readPayLogVisa[] = {0x00,(byte) 0xB2,0x01,(byte) 0x8C,0x00};
         for(i=1;i<=20;i++) {
-        	readPayLog[2] = (byte) i;
+        	readPayLogVisa[2] = (byte) i;
 	        try {
-				response = myTag.transceive(readPayLog);
+				response = myTag.transceive(readPayLogVisa);
 				ParseLogInfo pli = new ParseLogInfo(response);
-				tv1.setText(tv1.getText()+"\n"+pli.res);
+				if(pli.res.length() > 0) tv1.setText(tv1.getText()+"\n"+pli.res);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+        }
+        byte readPayLogMC[] = {0x00,(byte) 0xB2,0x01,0x5C,0x00};
+        for(i=1;i<=20;i++) {
+        	readPayLogMC[2] = (byte) i;
+	        try {
+				response = myTag.transceive(readPayLogMC);
+				ParseLogInfo pli = new ParseLogInfo(response);
+				if(pli.res.length() > 0) tv1.setText(tv1.getText()+"\n"+pli.res);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return;
